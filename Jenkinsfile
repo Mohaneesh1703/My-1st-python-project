@@ -1,32 +1,28 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK11' // Configure this in Jenkins tools
-    }
-
     stages {
         stage('Clone') {
             steps {
-                git 'https://github.com/<your-username>/<repo-name>.git'
+                git 'https://github.com/<your-username>/<your-repo-name>.git'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                sh 'javac StudentRepository.java'
+                sh 'pip install -r requirements.txt || true'
             }
         }
 
-        stage('Test') {
+        stage('Run Python Script') {
             steps {
-                sh 'java StudentRepository'
+                sh 'python student_repository.py'
             }
         }
 
-        stage('Archive') {
+        stage('Archive Output') {
             steps {
-                archiveArtifacts artifacts: '**/*.class', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/*.txt', allowEmptyArchive: true
             }
         }
     }
